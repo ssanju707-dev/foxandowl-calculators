@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fox &amp; Owl Money Calculators</title>
+<meta name="description" content="Free SIP and 401(k) match calculators from Fox & Owl Money. Educational illustrations, not financial advice.">
+<style>
+:root{--bg:#fffaf0;--card:#fff;--ink:#1b1f3f;--mut:#6b708a;--ac:#f28c28;--ok:#22965a;--bad:#d63c46;--line:#eadfce}
+@media (prefers-color-scheme:dark){:root{--bg:#14162b;--card:#1d2040;--ink:#f3f0e8;--mut:#a9aecb;--line:#33376a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,Segoe UI,Helvetica,Arial,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:30px;margin:8px 0}h2{font-size:22px;margin:0 0 8px}.sub{color:var(--mut);margin:0 0 24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin:0 0 22px}
+label{display:block;font-weight:600;margin:12px 0 4px}input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);font-size:16px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.out{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.k{background:rgba(242,140,40,.12);border-radius:12px;padding:12px}.k b{display:block;font-size:22px}.k span{color:var(--mut);font-size:13px}
+.good b{color:var(--ok)}.bad b{color:var(--bad)}
+.note{color:var(--mut);font-size:13px;margin-top:10px}
+footer{color:var(--mut);font-size:13px;border-top:1px solid var(--line);padding-top:16px}
+a{color:var(--ac)}
+</style></head><body><div class="wrap">
+<h1>🦊🦉 Fox &amp; Owl Money Calculators</h1>
+<p class="sub">Free, simple, no sign-up. These show the maths from our videos. They are illustrations with numbers you choose, not predictions or advice.</p>
+
+<div class="card"><h2>SIP calculator (India)</h2>
+<div class="row"><div><label for="sp">Monthly SIP (₹)</label><input id="sp" type="number" value="5000" min="0"></div>
+<div><label for="sy">Years</label><input id="sy" type="number" value="10" min="1"></div>
+<div><label for="sr">Assumed yearly return (%)</label><input id="sr" type="number" value="10" step="0.5"></div></div>
+<div class="out" id="so"></div>
+<p class="note">Assumes a steady return, which real funds never give. Returns can be lower or negative. Mutual fund investments are subject to market risks. Read all scheme-related documents carefully.</p></div>
+
+<div class="card"><h2>401(k) match calculator (US)</h2>
+<div class="row"><div><label for="ms">Annual salary ($)</label><input id="ms" type="number" value="60000" min="0"></div>
+<div><label for="mc">You contribute (% of pay)</label><input id="mc" type="number" value="3" step="0.5"></div>
+<div><label for="mr">Employer match rate (%)</label><input id="mr" type="number" value="50" step="5"></div>
+<div><label for="mk">Match applies up to (% of pay)</label><input id="mk" type="number" value="6" step="0.5"></div></div>
+<div class="out" id="mo"></div>
+<p class="note">Every plan differs: match formula, vesting and limits. Check your plan documents. General information only, not tax or financial advice.</p></div>
+
+<footer>Fictional examples for education. Not financial, tax or legal advice. More money stories: <a href="https://www.youtube.com/@foxandowlmoney">YouTube</a> · <a href="https://instagram.com/foxandowlmoney">Instagram</a></footer>
+</div>
+<script>
+const f=(n,c)=>c+Math.round(n).toLocaleString(c==='₹'?'en-IN':'en-US');
+function sip(){const P=+sp.value,y=+sy.value,r=+sr.value/100,i=r/12,n=y*12;
+ const inv=P*n,val=i===0?inv:P*((Math.pow(1+i,n)-1)/i)*(1+i),g=val-inv;
+ so.innerHTML=`<div class="k"><b>${f(inv,'₹')}</b><span>You invest</span></div><div class="k good"><b>${f(val,'₹')}</b><span>Value at that assumed return</span></div><div class="k ${g>=0?'good':'bad'}"><b>${f(g,'₹')}</b><span>Gain (value minus invested)</span></div>`}
+function m(){const S=+ms.value,c=+mc.value/100,r=+mr.value/100,k=+mk.value/100;
+ const mine=S*c,match=Math.min(c,k)*S*r,full=k*S*r,miss=full-match;
+ mo.innerHTML=`<div class="k"><b>${f(mine,'$')}</b><span>You put in a year</span></div><div class="k good"><b>${f(match,'$')}</b><span>Employer adds</span></div><div class="k"><b>${f(mine+match,'$')}</b><span>Total in your 401(k) this year</span></div><div class="k ${miss>0?'bad':'good'}"><b>${f(miss,'$')}</b><span>Match left unclaimed</span></div>`}
+['sp','sy','sr'].forEach(id=>document.getElementById(id).addEventListener('input',sip));
+['ms','mc','mr','mk'].forEach(id=>document.getElementById(id).addEventListener('input',m));
+sip();m();
+</script></body></html>
